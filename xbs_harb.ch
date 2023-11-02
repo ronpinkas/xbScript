@@ -1503,6 +1503,8 @@
 
       #ifdef __XHARBOUR__
         #include "hbfast.h"
+      #else
+        #include "hbvmint.h"  
       #endif
 
       static BOOL s_bArrayPrefix = FALSE;
