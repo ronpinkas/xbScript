@@ -1483,7 +1483,10 @@
     #ifdef __HARBOUR__
       #ifndef __XHARBOUR__
          #pragma BEGINDUMP
-            #define HB_LEGACY_TYPES_ON
+            #define BOOL  HB_BOOL
+            #define TRUE  HB_TRUE
+            #define FALSE HB_FALSE
+            #define BYTE  HB_BYTE
          #pragma ENDDUMP
       #endif
     #endif
