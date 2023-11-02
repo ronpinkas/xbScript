@@ -1487,6 +1487,8 @@
             #define TRUE  HB_TRUE
             #define FALSE HB_FALSE
             #define BYTE  HB_BYTE
+            
+            #include "hbvmint.h"
          #pragma ENDDUMP
       #endif
     #endif
@@ -1503,8 +1505,6 @@
 
       #ifdef __XHARBOUR__
         #include "hbfast.h"
-      #else
-        #include "hbvmint.h"  
       #endif
 
       static BOOL s_bArrayPrefix = FALSE;
