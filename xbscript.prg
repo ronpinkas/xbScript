@@ -213,7 +213,7 @@
          REQUEST RMDBFCDX
       #endif
    #else
-      #include "hbcompat.ch"
+      #include "../xhb/hbcompat.ch"
    #endif
 
    #ifndef NO_BOOST
