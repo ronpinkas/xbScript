@@ -1487,8 +1487,6 @@
             #define TRUE  HB_TRUE
             #define FALSE HB_FALSE
             #define BYTE  HB_BYTE
-            
-            #include "hbvmint.h"
          #pragma ENDDUMP
       #endif
     #endif
