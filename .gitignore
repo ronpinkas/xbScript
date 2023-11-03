@@ -2,6 +2,9 @@
 *.o
 *.ppo
 *.log
+*.ntx
+*.cdx
+*.idx
 
 windows/*
 win/*
