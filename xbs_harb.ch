@@ -371,150 +371,152 @@
 
   //----------------------------------------------------------------------------//
 
-  //--------------------------------------------------------------//
+  #ifdef __XHARBOUR__
+   //--------------------------------------------------------------//
+   
+   CLASS StringOle FROM _Character
 
-  CLASS StringOle FROM _Character
+      METHOD OleValuePlus( xArg )            OPERATOR "+"
+      METHOD OleValueMinus( xArg )           OPERATOR "-"
 
-     METHOD OleValuePlus( xArg )            OPERATOR "+"
-     METHOD OleValueMinus( xArg )           OPERATOR "-"
+      METHOD OleValueEqual( xArg )           OPERATOR "="
+      METHOD OleValueExactEqual( xArg )      OPERATOR "=="
+      METHOD OleValueNotEqual( xArg )        OPERATOR "!="
 
-     METHOD OleValueEqual( xArg )           OPERATOR "="
-     METHOD OleValueExactEqual( xArg )      OPERATOR "=="
-     METHOD OleValueNotEqual( xArg )        OPERATOR "!="
+   ENDCLASS
 
-  ENDCLASS
+   //--------------------------------------------------------------------
 
-  //--------------------------------------------------------------------
+   METHOD OleValuePlus( xArg ) CLASS StringOle
 
-  METHOD OleValuePlus( xArg ) CLASS StringOle
+      LOCAL xRet, oErr
 
-     LOCAL xRet, oErr
+      TRY
+         xRet := Self + xArg:OleValue
+      CATCH
+         oErr := ErrorNew()
+         oErr:Args          := { Self, xArg }
+         oErr:CanDefault    := .F.
+         oErr:CanRetry      := .F.
+         oErr:CanSubstitute := .T.
+         oErr:Description   := "argument error"
+         oErr:GenCode       := EG_ARG
+         oErr:Operation     := '+'
+         oErr:Severity      := ES_ERROR
+         oErr:SubCode       := 1081
+         oErr:SubSystem     := "BASE"
 
-     TRY
-        xRet := Self + xArg:OleValue
-     CATCH
-        oErr := ErrorNew()
-        oErr:Args          := { Self, xArg }
-        oErr:CanDefault    := .F.
-        oErr:CanRetry      := .F.
-        oErr:CanSubstitute := .T.
-        oErr:Description   := "argument error"
-        oErr:GenCode       := EG_ARG
-        oErr:Operation     := '+'
-        oErr:Severity      := ES_ERROR
-        oErr:SubCode       := 1081
-        oErr:SubSystem     := "BASE"
+         RETURN Throw( oErr )
+      END
 
-        RETURN Throw( oErr )
-     END
+      //TraceLog( Self, xArg, xArg:OleValue, xRet )
 
-     //TraceLog( Self, xArg, xArg:OleValue, xRet )
+   RETURN xRet
 
-  RETURN xRet
+   METHOD OleValueMinus( xArg ) CLASS StringOle
 
-  METHOD OleValueMinus( xArg ) CLASS StringOle
+      LOCAL xRet, oErr
 
-     LOCAL xRet, oErr
+      TRY
+         xRet := Self - xArg:OleValue
+      CATCH
+         oErr := ErrorNew()
+         oErr:Args          := { Self, xArg }
+         oErr:CanDefault    := .F.
+         oErr:CanRetry      := .F.
+         oErr:CanSubstitute := .T.
+         oErr:Description   := "argument error"
+         oErr:GenCode       := EG_ARG
+         oErr:Operation     := '+'
+         oErr:Severity      := ES_ERROR
+         oErr:SubCode       := 1082
+         oErr:SubSystem     := "BASE"
 
-     TRY
-        xRet := Self - xArg:OleValue
-     CATCH
-        oErr := ErrorNew()
-        oErr:Args          := { Self, xArg }
-        oErr:CanDefault    := .F.
-        oErr:CanRetry      := .F.
-        oErr:CanSubstitute := .T.
-        oErr:Description   := "argument error"
-        oErr:GenCode       := EG_ARG
-        oErr:Operation     := '+'
-        oErr:Severity      := ES_ERROR
-        oErr:SubCode       := 1082
-        oErr:SubSystem     := "BASE"
+         RETURN Throw( oErr )
+      END
 
-        RETURN Throw( oErr )
-     END
+      //TraceLog( Self, xArg, xArg:OleValue, xRet )
 
-     //TraceLog( Self, xArg, xArg:OleValue, xRet )
+   RETURN xRet
 
-  RETURN xRet
+   METHOD OleValueEqual( xArg ) CLASS StringOle
 
-  METHOD OleValueEqual( xArg ) CLASS StringOle
+      LOCAL xRet, oErr
 
-     LOCAL xRet, oErr
+      TRY
+         xRet := ( Self = xArg:OleValue )
+      CATCH
+         oErr := ErrorNew()
+         oErr:Args          := { Self, xArg }
+         oErr:CanDefault    := .F.
+         oErr:CanRetry      := .F.
+         oErr:CanSubstitute := .T.
+         oErr:Description   := "argument error"
+         oErr:GenCode       := EG_ARG
+         oErr:Operation     := '%'
+         oErr:Severity      := ES_ERROR
+         oErr:SubCode       := 1085
+         oErr:SubSystem     := "BASE"
 
-     TRY
-        xRet := ( Self = xArg:OleValue )
-     CATCH
-        oErr := ErrorNew()
-        oErr:Args          := { Self, xArg }
-        oErr:CanDefault    := .F.
-        oErr:CanRetry      := .F.
-        oErr:CanSubstitute := .T.
-        oErr:Description   := "argument error"
-        oErr:GenCode       := EG_ARG
-        oErr:Operation     := '%'
-        oErr:Severity      := ES_ERROR
-        oErr:SubCode       := 1085
-        oErr:SubSystem     := "BASE"
+         RETURN Throw( oErr )
+      END
 
-        RETURN Throw( oErr )
-     END
+      //TraceLog( Self, xArg, xArg:OleValue, xRet )
 
-     //TraceLog( Self, xArg, xArg:OleValue, xRet )
+   RETURN xRet
 
-  RETURN xRet
+   METHOD OleValueExactEqual( xArg ) CLASS StringOle
 
-  METHOD OleValueExactEqual( xArg ) CLASS StringOle
+      LOCAL xRet, oErr
 
-     LOCAL xRet, oErr
+      TRY
+         xRet := ( Self == xArg:OleValue )
+      CATCH
+         oErr := ErrorNew()
+         oErr:Args          := { Self, xArg }
+         oErr:CanDefault    := .F.
+         oErr:CanRetry      := .F.
+         oErr:CanSubstitute := .T.
+         oErr:Description   := "argument error"
+         oErr:GenCode       := EG_ARG
+         oErr:Operation     := '%'
+         oErr:Severity      := ES_ERROR
+         oErr:SubCode       := 1085
+         oErr:SubSystem     := "BASE"
 
-     TRY
-        xRet := ( Self == xArg:OleValue )
-     CATCH
-        oErr := ErrorNew()
-        oErr:Args          := { Self, xArg }
-        oErr:CanDefault    := .F.
-        oErr:CanRetry      := .F.
-        oErr:CanSubstitute := .T.
-        oErr:Description   := "argument error"
-        oErr:GenCode       := EG_ARG
-        oErr:Operation     := '%'
-        oErr:Severity      := ES_ERROR
-        oErr:SubCode       := 1085
-        oErr:SubSystem     := "BASE"
+         RETURN Throw( oErr )
+      END
 
-        RETURN Throw( oErr )
-     END
+      //TraceLog( Self, xArg, xArg:OleValue, xRet )
 
-     //TraceLog( Self, xArg, xArg:OleValue, xRet )
+   RETURN xRet
 
-  RETURN xRet
+   METHOD OleValueNotEqual( xArg ) CLASS StringOle
 
-  METHOD OleValueNotEqual( xArg ) CLASS StringOle
+      LOCAL xRet, oErr
 
-     LOCAL xRet, oErr
+      TRY
+         xRet := ( Self != xArg:OleValue )
+      CATCH
+         oErr := ErrorNew()
+         oErr:Args          := { Self, xArg }
+         oErr:CanDefault    := .F.
+         oErr:CanRetry      := .F.
+         oErr:CanSubstitute := .T.
+         oErr:Description   := "argument error"
+         oErr:GenCode       := EG_ARG
+         oErr:Operation     := '%'
+         oErr:Severity      := ES_ERROR
+         oErr:SubCode       := 1085
+         oErr:SubSystem     := "BASE"
 
-     TRY
-        xRet := ( Self != xArg:OleValue )
-     CATCH
-        oErr := ErrorNew()
-        oErr:Args          := { Self, xArg }
-        oErr:CanDefault    := .F.
-        oErr:CanRetry      := .F.
-        oErr:CanSubstitute := .T.
-        oErr:Description   := "argument error"
-        oErr:GenCode       := EG_ARG
-        oErr:Operation     := '%'
-        oErr:Severity      := ES_ERROR
-        oErr:SubCode       := 1085
-        oErr:SubSystem     := "BASE"
+         RETURN Throw( oErr )
+      END
 
-        RETURN Throw( oErr )
-     END
+      //TraceLog( Self, xArg, xArg:OleValue, xRet )
 
-     //TraceLog( Self, xArg, xArg:OleValue, xRet )
-
-  RETURN xRet
+   RETURN xRet
+  #endif
 
   //--------------------------------------------------------------//
   PROCEDURE PP_LoadClass()
