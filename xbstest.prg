@@ -25,7 +25,7 @@ PROCEDURE Main
 
    ? cName
 
-   USE ..\..\tests\test
+   USE ../../tests/test
    IF ! File( "test" + IndexExt() )
       INDEX on FIELD->First TO First
    ELSE

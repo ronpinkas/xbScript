@@ -2327,7 +2327,7 @@
               pDynFunc->pSymbols = symbols;
 
               pDynSym = hb_dynsymGet( sFunctionName );
-              //TraceLog( "ppgendyn.log", "Dyn: %p %s\n", pDynSym, sFunctionName );
+              TraceLog( "ppgendyn.log", "Dyn: %p %s->%p\n", pDynSym, sFunctionName, pDynFunc );
 
               pDynList->pProcsArray[ iBase + iPos ].pDynFunc     = pDynFunc;
               pDynList->pProcsArray[ iBase + iPos ].pDynSym      = pDynSym;
@@ -2391,7 +2391,7 @@
               }
               else
               {
-                 TraceLog( "ppgendyn.log", "*** FUNCTION MISMATCH (%i) '%s' ***\n", i, pDynList->pProcsArray[i].pDynSym->pSymbol->szName );
+                 TraceLog( "ppgendyn.log", "*** FUNCTION MISMATCH (%i) '%s' %p != %p ***\n", i, pDynList->pProcsArray[i].pDynSym->pSymbol->szName, pDynList->pProcsArray[i].pDynSym->pSymbol->value.pFunPtr, pDynList->pProcsArray[i].pDynFunc );
               }
 
               //TraceLog( "ppgendyn.log", "PP_RELEASEDYNPROCEDURES (%i) '%s' ***\n", i, pDynList->pProcsArray[i].pDynSym->pSymbol->szName );
