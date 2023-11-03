@@ -2399,10 +2399,10 @@
               #ifdef __CONCILE_PCODE__
                  // pcode was not allocated here.
               #else
-                 hb_xfree( (void *) ( pDynList->pProcsArray[i].pDynFunc->pCode ) );
+                 //hb_xfree( (void *) ( pDynList->pProcsArray[i].pDynFunc->pCode ) );
               #endif
 
-              hb_xfree( (void *) ( pDynList->pProcsArray[i].pDynFunc ) );
+              //hb_xfree( (void *) ( pDynList->pProcsArray[i].pDynFunc ) );
            }
 
            if( iBase )
@@ -2412,8 +2412,8 @@
            }
            else
            {
-              hb_xfree( (void *) pDynList );
-              pDynList = NULL;
+              //hb_xfree( (void *) pDynList );
+              //pDynList = NULL;
            }
 
            if( ! pxList )
