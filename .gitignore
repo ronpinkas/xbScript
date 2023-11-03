@@ -1,3 +1,7 @@
+*.c
+*.o
+*.ppo
+
 windows/*
 win/*
 darwin/*
