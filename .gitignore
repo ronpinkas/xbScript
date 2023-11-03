@@ -1,6 +1,7 @@
 *.c
 *.o
 *.ppo
+*.log
 
 windows/*
 win/*
