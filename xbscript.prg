@@ -214,6 +214,9 @@
       #endif
    #else
       #include "../xhb/hbcompat.ch"
+      #pragma -ks+
+      #pragma -kd+
+      #xtranslate TraceLog( => HB_TraceLog( 
    #endif
 
    #ifndef NO_BOOST
@@ -2634,8 +2637,8 @@ RETURN
   //--------------------------------------------------------------//
   #ifdef __HARBOUR__
      #ifndef __XHARBOUR__
-        #xuntranslate THROW( =>
-     #endif
+        #xuntranslate Throw( <oErr> ) => ( Eval( ErrorBlock(), <oErr> ), Break( <oErr> ) )
+      #endif
   #endif
 
   FUNCTION Throw( xVal )
@@ -11519,42 +11522,46 @@ RETURN 0
 
 //--------------------------------------------------------------//
 #ifndef __XHARBOUR__
-FUNCTION AtSkipStrings( sFind, sLine, nStart, bRule )
 
-   LOCAL nAt, nLen := Len( sLine ), cChar, cLastChar := ' ', nLenFind := Len( sFind )
+   //--------------------------------------------------------------//
+   FUNCTION AtSkipStrings( sFind, sLine, nStart, bRule )
 
-   IF nStart == NIL
-      nStart := 1
-   ENDIF
+      LOCAL nAt, nLen := Len( sLine ), cChar, cLastChar := ' ', nLenFind := Len( sFind )
 
-   IF bRule == NIL
-      bRule := .F.
-   ENDIF
+      IF nStart == NIL
+         nStart := 1
+      ENDIF
 
-   FOR nAt := nStart TO nLen
-       IF SubStr( sLine, nAt, nLenFind ) == sFind
-          RETURN nAt
-       ENDIF
+      IF bRule == NIL
+         bRule := .F.
+      ENDIF
 
-       cChar := SubStr( sLine, nAt, 1 )
+      FOR nAt := nStart TO nLen
+         IF SubStr( sLine, nAt, nLenFind ) == sFind
+            RETURN nAt
+         ENDIF
 
-       IF cChar $ '"'+"'"
-          DO WHILE ( nAt < nLen ) .AND. SubStr( sLine, ++nAt, 1 ) != cChar
-          ENDDO
-          LOOP // No need to record cLastChar
-       ELSEIF cChar == '['
-          IF ! ( bRule .OR. IsAlpha( cLastChar ) .OR. IsDigit( cLastChar ) .OR. cLastChar $ "])}_." )
-             DO WHILE ( nAt < nLen ) .AND. SubStr( sLine, ++nAt, 1 ) != ']'
-             ENDDO
-             cLastChar := ']'
-             LOOP // Recorded cLastChar
-          ENDIF
-       ENDIF
+         cChar := SubStr( sLine, nAt, 1 )
 
-       cLastChar := cChar
-    NEXT
+         IF cChar $ '"'+"'"
+            DO WHILE ( nAt < nLen ) .AND. SubStr( sLine, ++nAt, 1 ) != cChar
+            ENDDO
+            LOOP // No need to record cLastChar
+         ELSEIF cChar == '['
+            IF ! ( bRule .OR. IsAlpha( cLastChar ) .OR. IsDigit( cLastChar ) .OR. cLastChar $ "])}_." )
+               DO WHILE ( nAt < nLen ) .AND. SubStr( sLine, ++nAt, 1 ) != ']'
+               ENDDO
+               cLastChar := ']'
+               LOOP // Recorded cLastChar
+            ENDIF
+         ENDIF
 
-RETURN 0
+         cLastChar := cChar
+      NEXT
+
+   RETURN 0
+
+   //--------------------------------------------------------------//  
 #endif
 
 //--------------------------------------------------------------//
@@ -12606,7 +12613,7 @@ STATIC FUNCTION DefRTEHandler( e )
    ErrorLevel(1)
    Break( e )
 
-#ifndef __XHARBOUR__
+#ifndef __HARBOUR__
 RETURN .F.
 #endif
 
