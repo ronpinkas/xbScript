@@ -1,9 +1,30 @@
-*.c
+# Ignore all
+*
+# Unignore all with extensions
+!*.*
+# Unignore all dirs
+!*/
+
+.DS_Store
+
 *.o
-*.ppo
+*.a
+*.so
+*.obj
+*.lib
+*.exp
+*.dll
+*.exe
+*.pdb
 *.log
+*.ppo
+*.pp$
+*.map
+
+*.dbf
 *.ntx
 *.cdx
+*.fpt
 *.idx
 
 windows/*

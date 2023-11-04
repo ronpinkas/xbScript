@@ -95,8 +95,10 @@
        METHOD LoadFiveWin()      INLINE PP_LoadFw()
      #endif
 
-     #if defined( DYN ) /* defined( __CONCILE_PCODE__ ) */
-        DESTRUCTOR Finalize()
+     #if defined( DYN ) 
+         #ifndef __CONCILE_PCODE__
+           DESTRUCTOR Finalize()
+         #endif
      #endif
 
   ENDCLASS
@@ -113,21 +115,21 @@
 
   //----------------------------------------------------------------------------//
   // Destructor!
-  #if defined( DYN ) /* || defined( __CONCILE_PCODE__ ) */
+  #if defined( DYN ) 
 
       // __CONCILE_PCODE__ has global release logic by means of s_hDynFuncLists
+      #ifndef __CONCILE_PCODE__
+         PROCEDURE Finalize() CLASS TInterpreter
 
-      PROCEDURE Finalize() CLASS TInterpreter
+   TraceLog( ::nId, ::cName, ::pDynList )
 
-         //TraceLog( ::nId, ::cName, ::pDynList )
+            IF ::pDynList != NIL
+               PP_ReleaseDynProcedures( 0, ::pDynList )
+               ::pDynList := NIL
+            ENDIF
 
-         IF ::pDynList != NIL
-            PP_ReleaseDynProcedures( 0, ::pDynList )
-            ::pDynList := NIL
-         ENDIF
-
-      RETURN
-
+         RETURN
+      #endif
   #endif
 
   //----------------------------------------------------------------------------//
@@ -242,6 +244,8 @@
      LOCAL bErrHandler := ErrorBlock( {|e| Break(e) } )
      LOCAL bInterceptRTEBlock
 
+     //TraceLog( HB_aParams() )
+
      BEGIN SEQUENCE
 
         IF ! Empty( ::cText )
@@ -271,6 +275,7 @@
              #ifdef DYN
                  IF ::nNextDynProc <= Len( ::aCompiledProcs )
                     PP_GenDynProcedures( ::aCompiledProcs, ::nNextDynProc, @::pDynList )
+                    //TraceLog( ::pDynList )
                     ::nNextDynProc := Len( ::aCompiledProcs ) + 1
                  ENDIF
              #endif
@@ -356,14 +361,24 @@
     #if defined( __CONCILE_PCODE__ ) /* || defined( DYN ) */
 
       EXIT PROCEDURE PP_Cleanup()
-         LOCAL ohDynFuncLists
+         LOCAL pDynFuncList, aDynFuncLists := {}, i, iDynLists
 
          //TraceLog( "Exit" )
 
-         FOR EACH ohDynFuncLists IN s_hDynFuncLists
-            //TraceLog( ohDynFuncLists:Key, ohDynFuncLists:Value )
-            PP_ReleaseDynProcedures( 0, ohDynFuncLists:Value )
+         FOR EACH pDynFuncList IN s_hDynFuncLists          
+            aAdd( aDynFuncLists, pDynFuncList:value )
          NEXT
+
+         iDynLists := Len( aDynFuncLists )
+
+         FOR i := iDynLists to 1 STEP -1
+            //TraceLog( i, aDynFuncLists[i] )
+            PP_ReleaseDynProcedures( 0, aDynFuncLists[i] )
+         NEXT
+
+         // Avoid duplicate release!
+         aDynFuncLists := NIL
+         s_hDynFuncLists := NIL
       RETURN
     #endif
 
@@ -2251,6 +2266,7 @@
               if( HB_IS_POINTER( pxList ) )
               {
                  pDynList = (DYN_PROCS_LIST *) pxList->item.asPointer.value;
+                 //TraceLog( "ppgendyn.log", "PP_GenDynProcedures() INHERITED: %p(%i)\n", pDynList, iProcedures );
               }
               else
               {
@@ -2272,6 +2288,7 @@
            {
               iBase = 0;
               pDynList = (DYN_PROCS_LIST *) hb_xgrab( sizeof(int) + ( sizeof( DYN_PROC ) * ( iProcedures - iProcedure ) ) );
+              //TraceLog( "ppgendyn.log", "PP_GenDynProcedures() CREATED: %p(%i)\n", pDynList, iProcedures );
               pDynList->iProcs = iProcedures - iProcedure;
 
               if( pxList == NULL )
@@ -2327,7 +2344,7 @@
               pDynFunc->pSymbols = symbols;
 
               pDynSym = hb_dynsymGet( sFunctionName );
-              TraceLog( "ppgendyn.log", "Dyn: %p %s->%p\n", pDynSym, sFunctionName, pDynFunc );
+              //TraceLog( "ppgendyn.log", "%p[%i]-Dyn: %p %s->%p\n", pDynList, iBase + iPos, pDynSym, sFunctionName, pDynFunc );
 
               pDynList->pProcsArray[ iBase + iPos ].pDynFunc     = pDynFunc;
               pDynList->pProcsArray[ iBase + iPos ].pDynSym      = pDynSym;
@@ -2344,6 +2361,7 @@
            if( hb_param( 3, HB_IT_BYREF ) )
            {
               hb_storptr( pDynList, 3 );
+              //TraceLog( "ppgendyn.log", "*** STORED Dyn: %p[%i]\n", pDynList, iProcedures );
            }
 
            //TraceLog( "ppgendyn.log", "Base: %i, New: %i\n", iBase, pDynList->iProcs );
@@ -2360,6 +2378,7 @@
            if( pxList )
            {
               pDynList = (DYN_PROCS_LIST *) pxList->item.asPointer.value;
+              //TraceLog( "ppgendyn.log", "*** Relese: %p\n", pDynList );
            }
            else
            {
@@ -2399,10 +2418,10 @@
               #ifdef __CONCILE_PCODE__
                  // pcode was not allocated here.
               #else
-                 //hb_xfree( (void *) ( pDynList->pProcsArray[i].pDynFunc->pCode ) );
+                 hb_xfree( (void *) ( pDynList->pProcsArray[i].pDynFunc->pCode ) );
               #endif
 
-              //hb_xfree( (void *) ( pDynList->pProcsArray[i].pDynFunc ) );
+              hb_xfree( (void *) ( pDynList->pProcsArray[i].pDynFunc ) );
            }
 
            if( iBase )
@@ -2412,8 +2431,8 @@
            }
            else
            {
-              //hb_xfree( (void *) pDynList );
-              //pDynList = NULL;
+              hb_xfree( (void *) pDynList );
+              pDynList = NULL;
            }
 
            if( ! pxList )

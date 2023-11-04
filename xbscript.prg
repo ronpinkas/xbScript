@@ -1040,6 +1040,7 @@ RETURN
 
      //Alert( "Generating" )
      PP_GenDynProcedures( aProcedures, nDynOffset, @pDynFunctions )
+     //TraceLog( pDynFunctions )
 
      s_hDynFuncLists[ cID ] := pDynFunctions
 
