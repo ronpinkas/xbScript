@@ -3187,7 +3187,7 @@ RETURN
            __QQPub( cVar )
 
            #ifdef __HARBOUR__
-              TraceLog( cVar, xInit )
+              //TraceLog( cVar, xInit )
               __MVPut( cVar, xInit )
            #else
               &( cVar ) := xInit
