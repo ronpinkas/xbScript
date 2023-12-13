@@ -1,6 +1,6 @@
-# xbase-script
+# xbScript
 
-xBaseScript is an xBase language (dBase/FoxPro/Clipper/[x]Harbour Interpreter, 
+xbScript is an xBase language (dBase/FoxPro/Clipper/[x]Harbour Interpreter, 
 implemenmted in the Clipper/Harbour/xHarbour dialects - including a complete
 Clipper Pre-Processor (supporting the [x]Harbour extensions.
 
